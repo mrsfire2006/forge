@@ -7,10 +7,12 @@ const auth = betterAuth({
 		provider: 'pg',
 		schemaName: 'auth'
 	}),
-	secret:env.BETTER_AUTH_SECRET,
-	baseURL:env.BETTER_AUTH_URL,
+	secret: env.BETTER_AUTH_SECRET,
 	emailAndPassword: {
-		enabled: true
+		enabled: true,
+		minPasswordLength: 3
 	}
 });
 export default auth;
+
+export type AuthType = typeof auth;
