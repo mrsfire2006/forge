@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from '@better-auth/drizzle-adapter';
 import { db } from '$lib/server/db';
 import { env } from '$env/dynamic/private';
-const auth = betterAuth({
+ const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: 'pg',
 		schemaName: 'auth'
@@ -12,6 +12,7 @@ const auth = betterAuth({
 		enabled: true,
 		minPasswordLength: 3
 	}
+ 
 });
 export default auth;
 

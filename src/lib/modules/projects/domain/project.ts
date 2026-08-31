@@ -1,7 +1,10 @@
 import type { ProjectInsert, ProjectSelect, ProjectStatusType } from '../schema';
 
 export type ProjectUpdate = Partial<
-	Pick<ProjectSelect, 'name' | 'description' | 'status' | 'dueDate' | 'archivedAt' | 'completedAt'>
+	Pick<
+		ProjectSelect,
+		'name' | 'description' | 'status' | 'dueDate' | 'archivedAt' | 'completedAt' | 'color'
+	>
 >;
 
 export class Project {
@@ -14,7 +17,8 @@ export class Project {
 		workspaceId: string,
 		description: string | undefined,
 		workspaceMemberId: string,
-		status: ProjectStatusType
+		status: ProjectStatusType,
+		color: string
 	): ProjectInsert {
 		return {
 			id: crypto.randomUUID(),
@@ -22,8 +26,16 @@ export class Project {
 			workspaceId,
 			createdBy: workspaceMemberId,
 			description,
-			status
+			status,
+			color
 		};
+	}
+	changeColor(color: string) {
+		if (!color || color === this.project.color) {
+			return;
+		}
+		this.project.color = color;
+		this.changed = true;
 	}
 	changeStatus(status: ProjectStatusType): void {
 		if (this.project.status === status) {
@@ -79,7 +91,8 @@ export class Project {
 			status: this.project.status,
 			dueDate: this.project.dueDate,
 			archivedAt: this.project.archivedAt,
-			completedAt: this.project.completedAt
+			completedAt: this.project.completedAt,
+			color: this.project.color
 		};
 	}
 

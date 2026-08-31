@@ -19,7 +19,7 @@ export const project = pgTable('project', {
 	description: text('description'),
 
 	status: projectStatus('status').notNull().default('planning'),
-
+	color: text('color').notNull(),
 	startDate: timestamp('start_date'),
 
 	dueDate: timestamp('due_date'),

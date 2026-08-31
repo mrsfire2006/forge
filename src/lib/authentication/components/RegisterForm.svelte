@@ -5,6 +5,8 @@
 	import { ArrowRight, CircleAlert, Eye, EyeOff } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
 	import { authClient } from '../auth-client';
+	import Icon from '@iconify/svelte';
+	import { goto } from '$app/navigation';
 
 	interface RegisterData {
 		name: string;
@@ -85,13 +87,12 @@
 		loading = true;
 
 		try {
-			const { data, error: signUpError } = await authClient.signUp.email({
+			const { error: signUpError } = await authClient.signUp.email({
 				name: formData.name,
 				email: formData.email,
 				password: formData.password
 			});
-			console.log(data);
-			console.log(signUpError);
+
 			if (signUpError) {
 				error = signUpError.message || 'Unable to create your account.';
 				return;
@@ -99,11 +100,11 @@
 
 			success = true;
 
-			redirectTimer = setTimeout(() => {
+			redirectTimer = setTimeout(async() => {
 				if (onSubmit) {
 					onSubmit(formData);
 				} else {
-					window.location.href = resolve('/');
+					await goto(resolve("/"))
 				}
 			}, 1500);
 		} catch (err) {
@@ -112,19 +113,12 @@
 		} finally {
 			loading = false;
 		}
-
-		redirectTimer = setTimeout(() => {
-			if (onSubmit) {
-				onSubmit(formData);
-			} else {
-				window.location.href = resolve('/');
-			}
-		}, 1500);
 	}
 	onDestroy(() => {
-		clearTimeout(redirectTimer);
+		if (redirectTimer) {
+			clearTimeout(redirectTimer);
+		}
 	});
-
 	function handleInput(event: Event) {
 		const target = event.currentTarget as HTMLInputElement;
 		const { name, value } = target;
@@ -163,7 +157,7 @@
 	</section>
 {:else}
 	<section
-		class="w-[min(100%,440px)] rounded-[12px] border border-border bg-[#1b1d1ef0] px-[clamp(40px,4vw,42px)] py-10.5 shadow-[0_22px_80px_#00000047]"
+		class="w-[min(100%,440px)] rounded-[12px] border border-border bg-[#1b1d1ef0] px-[clamp(40px,4vw,42px)] py-10.5 shadow-[0_22px_80px_#00000047] md:w-full md:border-0 md:bg-transparent md:p-0 md:shadow-none"
 	>
 		<div class="text-center">
 			<Logo compact={false} />
@@ -266,7 +260,7 @@
 
 			{#if error}
 				<span
-					class="flex items-center gap-2 border-l-2 border-[#e28b7d] pl-2 text-[11px] leading-4 text-[#d6a19a]"
+					class="flex items-center gap-2 border-l-2 border-[#e28b7d] pl-2 text-[16px] leading-4 text-[#d6a19a]"
 				>
 					<CircleAlert size={12} strokeWidth={1.8} />
 					{error}
@@ -275,7 +269,7 @@
 
 			<Button
 				type="submit"
-				class="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-[7px] border-0 p-[12px_16px] text-[13px] font-bold"
+				class="mt-5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 p-[12px_16px] text-[13px] font-bold"
 				disabled={loading}
 			>
 				{loading ? 'Please wait...' : 'Create account'}
@@ -292,6 +286,26 @@
 
 				<a href={resolve('/login')} class="text-primary no-underline"> Sign in </a>
 			</p>
+		</div>
+		<div class="social-section">
+			<div class="divider">
+				<span>OR CONTINUE WITH</span>
+			</div>
+
+			<div class="social-buttons">
+				<button type="button" class="social-button">
+ 
+
+					<Icon icon="simple-icons:github" width="16" color="currentColor" />
+					GitHub
+				</button>
+
+				<button type="button" class="social-button">
+					<Icon icon="logos:google-icon" width="20" />
+
+					Google
+				</button>
+			</div>
 		</div>
 	</section>
 {/if}
@@ -345,6 +359,58 @@
 	.checkmark {
 		animation: check-draw 0.4s 0.15s ease-out both;
 	}
+	.social-buttons {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 9px;
+		margin-top: 13px;
+	}
+
+	.social-button {
+		display: flex;
+		height: 40px;
+		align-items: center;
+		justify-content: center;
+		gap: 9px;
+		border: 1px solid rgba(255, 255, 255, 0.07);
+		border-radius: 7px;
+		background: rgba(255, 255, 255, 0.025);
+		color: rgba(255, 255, 255, 0.65);
+		font-size: 11px;
+		cursor: pointer;
+		transition:
+			border-color 180ms ease,
+			background 180ms ease,
+			transform 180ms ease;
+	}
+
+	.social-button:hover {
+		border-color: rgba(255, 255, 255, 0.13);
+		background: rgba(255, 255, 255, 0.045);
+		transform: translateY(-1px);
+	}
+
+	.social-section {
+		margin-top: 26px;
+	}
+
+	.divider {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: rgba(255, 255, 255, 0.2);
+		font-size: 8px;
+		letter-spacing: 0.12em;
+	}
+
+	.divider::before,
+	.divider::after {
+		content: '';
+		height: 1px;
+		flex: 1;
+		background: rgba(255, 255, 255, 0.06);
+	}
+
 	@keyframes success-pop {
 		0% {
 			opacity: 0;
