@@ -1,16 +1,20 @@
-<script lang="ts">
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
+<script>
+	import { resolve } from "$app/paths";
+	import Button from "$lib/components/ui/button/button.svelte";
 
-	import { authClient } from '$lib/authentication/auth-client';
-
-	const session = authClient.useSession();
-	$effect(() => {
-		if ($session.isPending) {
-			return;
-		}
-		if (!$session.data) {
-			void goto(resolve('/login'));
-		}
-	});
 </script>
+
+
+
+<div class="flex">
+
+    <Button href={resolve('/dashboard/workspaces')}>
+        workspaces
+    </Button>
+    <Button href={resolve('/dashboard/users')}>
+        users
+    </Button>
+    <Button href={resolve('/dashboard/workspaces/[slug]', {slug:"hello"})}>
+        W
+    </Button>
+</div>

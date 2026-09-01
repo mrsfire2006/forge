@@ -1,28 +1,24 @@
 <script>
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-svelte';
+	import { ChevronDown, PanelLeftClose, PanelLeftOpen } from 'lucide-svelte';
+	import UserLogo from '$lib/components/shared/UserLogo.svelte';
 	import { page } from '$app/state';
+	import WorkspaceNavbarContent from './navbar-content/WorkspaceNavbarContent.svelte';
+	import DashboardNavbarContent from './navbar-content/DashboardNavbarContent.svelte';
+	import * as Popover from '$lib/components/ui/popover/index.js';
 
-	const slug = $derived(page.params.slug ?? '');
-	const projectId = $derived(page.params.projectId ?? '');
-	const currentPath = $derived(page.url.pathname);
-	const pageName = $derived(
-		currentPath === `/w/${slug}`
-			? 'Overview'
-			: currentPath === `/w/${slug}/tasks`
-				? 'My Tasks'
-				: currentPath === `/w/${slug}/projects`
-					? 'Projects'
-					: ''
-	);
 	const sidebar = Sidebar.useSidebar();
 	const isCompact = $derived(sidebar.isMobile ? sidebar.openMobile : sidebar.open);
+
+	const currentPath = $derived(page.url.pathname);
 </script>
 
-<nav class="flex h-16 flex-row items-center justify-between border-b border-b-border bg-background">
-	<div class="flex min-w-0 items-center gap-3">
-		<Sidebar.Trigger
-			class="
+<nav
+	class="flex min-h-16 flex-row items-center justify-between border-b border-b-border bg-background"
+>
+	<Sidebar.Trigger
+		class="
+				
 				group hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring ml-2 flex
 				size-9 shrink-0 items-center
 				justify-center
@@ -35,37 +31,30 @@
 				focus-visible:ring-1 focus-visible:outline-none
 				active:scale-95
 			"
-		>
-			{#if !isCompact}
-				<PanelLeftOpen class="size-4" />
-			{:else}
-				<PanelLeftClose class="size-4" />
-			{/if}
-		</Sidebar.Trigger>
-		<div class="h-5 w-px bg-border/70"></div>
+	>
+		{#if !isCompact}
+			<PanelLeftOpen class="size-4" />
+		{:else}
+			<PanelLeftClose class="size-4" />
+		{/if}
+	</Sidebar.Trigger>
 
-		<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm">
-			<span class="font-medium text-muted-foreground">
-				{slug}
-			</span>
+	{#if currentPath === '/dashboard/workspaces' || currentPath === '/dashboard/users'}
+		<DashboardNavbarContent />
+	{:else}
+		<WorkspaceNavbarContent />
+	{/if}
 
-			<ChevronRight class="size-3.5 text-muted-foreground/50" />
-
-			{#if projectId}
-				<span class="text-muted-foreground"> Projects </span>
-
-				<ChevronRight class="size-3.5 text-muted-foreground/50" />
-
-				<span class="font-semibold text-foreground">
-					{projectId}
-				</span>
-			{:else}
-				<span class="font-semibold text-foreground">
-					{pageName}
-				</span>
-			{/if}
-		</nav>
-	</div>
+	<Popover.Root>
+		<Popover.Trigger>
+			<UserLogo showBadge={false} customStyle="mr-5" id="" name="mrs">
+				{#snippet badge()}
+					<ChevronDown size={15} />
+				{/snippet}
+			</UserLogo>
+		</Popover.Trigger>
+		<Popover.Content class="w-20">settings</Popover.Content>
+	</Popover.Root>
 </nav>
 {#if sidebar.isMobile && sidebar.openMobile}
 	<button
@@ -100,7 +89,6 @@
             active:shadow-lg
         "
 	>
-		<!-- النقطة الملونة مع نبض خفيف -->
 		<span class="relative flex size-2 shrink-0">
 			<span
 				class="
@@ -118,7 +106,6 @@
 			></span>
 		</span>
 
-		<!-- النص -->
 		<span class="font-medium whitespace-nowrap select-none"> Tap to close </span>
 	</button>
 {/if}

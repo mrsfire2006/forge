@@ -18,7 +18,7 @@
 		<span></span>
 	</div>
 
-	<div class="relative z-10 grid min-h-dvh lg:grid-cols-[1.15fr_0.85fr]">
+	<div class="relative z-10 grid min-h-dvh md:grid-cols-[1.15fr_1fr]">
 		<!-- =========================================
 		     HERO / FORGE SIDE
 		========================================= -->

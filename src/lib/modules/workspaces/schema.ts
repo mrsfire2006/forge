@@ -1,5 +1,6 @@
 import { user } from '$lib/authentication/auth-schema';
 import { pgEnum, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
+export const workspaceVisibility = pgEnum('workspace_visibility', ['public', 'private']);
 
 export const workspace = pgTable('workspace', {
 	id: text('id').primaryKey(),
@@ -7,6 +8,7 @@ export const workspace = pgTable('workspace', {
 	slug: text('slug').notNull().unique(),
 	description: text('description'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
+	visibility: workspaceVisibility('visibility').default('private').notNull(),
 	updatedAt: timestamp('updated_at')
 		.defaultNow()
 		.$onUpdate(() => new Date())
