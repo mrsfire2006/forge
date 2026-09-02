@@ -1,27 +1,164 @@
-node_modules
+# ==========================================
+# Dependencies
+# ==========================================
 
-# Output
-.output
-.vercel
-.netlify
-.wrangler
-/.svelte-kit
-/build
+node_modules/
 
+
+# ==========================================
+# SvelteKit
+# ==========================================
+
+apps/frontend/.svelte-kit/
+apps/frontend/.output/
+apps/frontend/build/
+
+
+# ==========================================
+# Vercel / Netlify / Cloudflare
+# ==========================================
+
+apps/frontend/.vercel/
+apps/frontend/.netlify/
+apps/frontend/.wrangler/
+
+
+# ==========================================
+# Vite
+# ==========================================
+
+apps/frontend/vite.config.js.timestamp-*
+apps/frontend/vite.config.ts.timestamp-*
+
+
+# ==========================================
+# Environment Variables
+# ==========================================
+
+apps/frontend/.env
+apps/frontend/.env.*
+!apps/frontend/.env.example
+!apps/frontend/.env.test
+
+# ASP.NET
+apps/api/.env
+apps/api/.env.*
+
+
+# ==========================================
+# .NET Build Output
+# ==========================================
+
+**/bin/
+**/obj/
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# NuGet packages folder
+packages/
+
+# Test results
+TestResults/
+*.trx
+
+
+# ==========================================
+# .NET User / IDE Files
+# ==========================================
+
+*.user
+*.rsuser
+*.suo
+*.userosscache
+
+.vs/
+
+
+# ==========================================
+# ASP.NET Development Certificates
+# ==========================================
+
+*.pfx
+
+
+# ==========================================
+# ASP.NET Logs
+# ==========================================
+
+*.log
+
+# ASP.NET generated logs
+logs/
+
+
+# ==========================================
+# Coverage
+# ==========================================
+
+coverage/
+*.coverage
+*.coveragexml
+
+
+# ==========================================
+# Frontend Coverage
+# ==========================================
+
+apps/frontend/coverage/
+
+
+# ==========================================
 # OS
+# ==========================================
+
 .DS_Store
 Thumbs.db
 
-# Env
-.env
-.env.*
-!.env.example
-!.env.test
-
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+# Windows
+Desktop.ini
 
 
+# ==========================================
+# Linux
+# ==========================================
 
-dev/
+*~
+.directory
+
+
+# ==========================================
+# VS Code
+# ==========================================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+
+# ==========================================
+# JetBrains
+# ==========================================
+
+.idea/
+*.iml
+
+
+# ==========================================
+# Temporary Files
+# ==========================================
+
+*.tmp
+*.temp
+*.swp
+*.swo
+
+
+# ==========================================
+# SvelteKit local development
+# ==========================================
+
+apps/frontend/dev/
