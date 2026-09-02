@@ -4,7 +4,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, CircleAlert, Eye, EyeOff } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
-	import { authClient } from '../auth-client';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
 
@@ -87,24 +86,24 @@
 		loading = true;
 
 		try {
-			const { error: signUpError } = await authClient.signUp.email({
-				name: formData.name,
-				email: formData.email,
-				password: formData.password
-			});
+			// const { error: signUpError } = await authClient.signUp.email({
+			// 	name: formData.name,
+			// 	email: formData.email,
+			// 	password: formData.password
+			// });
 
-			if (signUpError) {
-				error = signUpError.message || 'Unable to create your account.';
-				return;
-			}
+			// if (signUpError) {
+			// 	error = signUpError.message || 'Unable to create your account.';
+			// 	return;
+			// }
 
 			success = true;
 
-			redirectTimer = setTimeout(async() => {
+			redirectTimer = setTimeout(async () => {
 				if (onSubmit) {
 					onSubmit(formData);
 				} else {
-					await goto(resolve("/"))
+					await goto(resolve('/'));
 				}
 			}, 1500);
 		} catch (err) {
@@ -294,8 +293,6 @@
 
 			<div class="social-buttons">
 				<button type="button" class="social-button">
- 
-
 					<Icon icon="simple-icons:github" width="16" color="currentColor" />
 					GitHub
 				</button>

@@ -3,7 +3,6 @@
 	import Logo from '$lib/components/shared/Logo.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ArrowRight, CircleAlert, Eye, EyeOff } from 'lucide-svelte';
-	import { authClient } from '../auth-client';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
 
@@ -59,20 +58,20 @@
 		error = '';
 
 		try {
-			const { error: signInError } = await authClient.signIn.email({
-				email: formData.email,
-				password: formData.password
-			});
+			// const { error: signInError } = await authClient.signIn.email({
+			// 	email: formData.email,
+			// 	password: formData.password
+			// });
 
-			if (signInError) {
-				error = signInError.message || 'Invalid email or password.';
-				return;
-			}
+			// if (signInError) {
+			// 	error = signInError.message || 'Invalid email or password.';
+			// 	return;
+			// }
 
 			if (onSubmit) {
 				onSubmit(formData);
 			} else {
-				await goto(resolve("/"))
+				await goto(resolve('/'));
 			}
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Unable to sign in.';
@@ -196,15 +195,13 @@
 
 		<div class="social-buttons">
 			<button type="button" class="social-button">
-					<Icon icon="simple-icons:github" width="16" color="currentColor" />
-
+				<Icon icon="simple-icons:github" width="16" color="currentColor" />
 
 				GitHub
 			</button>
 
 			<button type="button" class="social-button">
-					<Icon icon="logos:google-icon" width="20" />
-
+				<Icon icon="logos:google-icon" width="20" />
 
 				Google
 			</button>
