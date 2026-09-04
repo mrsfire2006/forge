@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from "$app/state";
+
 	// type Product = {
 	// 	id: number;
 	// 	title: string;
@@ -50,7 +52,7 @@
 </script>
 
 <main>
-	<!-- <section class="header">
+ 	<!-- <section class="header">
 		<div>
 			<p class="eyebrow">CATALOG</p>
 			<h1>Products</h1>

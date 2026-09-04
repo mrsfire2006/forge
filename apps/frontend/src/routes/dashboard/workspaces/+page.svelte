@@ -1,6 +1,21 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
+	import { AuthFacade, type userWorkspace } from '$lib/features/auth/auth-facade';
+	import CreateEditWorkspace from '$lib/features/workspaces/components/CreateEditWorkspace.svelte';
+	import WorkspaceCard from '$lib/features/workspaces/components/WorkspaceCard.svelte';
 	import { Plus, Search } from 'lucide-svelte';
+
+	const workspacesQuery = AuthFacade.useTanstack().userWorkspaces();
+	const workspacesResult = $derived(workspacesQuery.data);
+	const workspaces = $derived(workspacesResult?.value);
+
+	let selectedWorkspace = $state<userWorkspace | undefined>();
+	let editOpen = $state(false);
+
+	function handleEdit(workspace: userWorkspace) {
+		selectedWorkspace = workspace;
+		editOpen = true;
+	}
 </script>
 
 <main class="h-full p-[54px_48px_80px]">
@@ -10,20 +25,36 @@
 			<h1>Workspaces</h1>
 			<p>Everything your teams are building, in one place.</p>
 		</div>
-		<a class="create-button" href={resolve('/dashboard/users')}
-			>
-           <Plus/>
-			Create workspace</a
+		<a class="create-button" href={resolve('/dashboard/workspaces/new')}
+			><Plus /> Create workspace</a
 		>
 	</div>
 	<dir class="directory-toolbar"
 		><div class="directory-search">
-			<Search/><input placeholder="Search workspaces..." aria-label="Search workspaces" value="" />
+			<Search /><input placeholder="Search workspaces..." aria-label="Search workspaces" value="" />
 		</div></dir
 	>
 	<div class="workspace-summary"></div>
-	<div class="workspaces-grid"></div>
+	<div class="workspace-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+		{#each workspaces?.data as w}
+			<WorkspaceCard onEdit={handleEdit} workspace={w} />
+		{/each}
+	</div>
 </main>
+{#if selectedWorkspace}
+	<CreateEditWorkspace
+		mode="edit"
+		workspace={selectedWorkspace}
+		openPop={editOpen}
+		onOpenChange={(open) => {
+			editOpen = open;
+
+			if (!open) {
+				selectedWorkspace = undefined;
+			}
+		}}
+	/>
+{/if}
 
 <style>
 	.feature-heading {
@@ -95,5 +126,9 @@
 		font-size: 11px;
 		font-weight: 700;
 		display: flex;
+	}
+	.workspace-grid {
+		gap: 14px;
+		display: grid;
 	}
 </style>

@@ -8,23 +8,47 @@
 		id: string;
 		size?: number;
 		badge?: Snippet;
+		radius?: number;
 		customStyle?: string;
 		showBadge?: boolean;
+		ignoreInitial?: boolean;
+		backgroundColor?: string;
+		textColor?: string;
+		hover?: boolean;
 	}
 
-	let { name, id, badge, customStyle, showBadge = true, size = 40 }: Props = $props();
+	let {
+		name,
+		id,
+		badge,
+		customStyle,
+		backgroundColor,
+		textColor,
+		hover = true,
+		ignoreInitial = false,
+		radius = 50,
+		showBadge = true,
+		size = 40
+	}: Props = $props();
 	let initials = $derived.by(() => {
+		if (ignoreInitial) {
+			return name.trim();
+		}
 		const value = name.trim();
 
 		if (!value) {
 			return '?';
 		}
 
-		return value
-			.split(/\s+/)
+		const words = value.split(/\s+/);
+
+		if (words.length === 1) {
+			return words[0].slice(0, 2).toUpperCase();
+		}
+
+		return words
 			.map((word) => word[0])
 			.join('')
-			.slice(0, 2)
 			.toUpperCase();
 	});
 
@@ -75,8 +99,8 @@
 
 		if (!value) {
 			return {
-				background: 'hsl(220, 15%, 25%)',
-				text: 'white'
+				background: backgroundColor ? backgroundColor : 'hsl(220, 15%, 25%)',
+				text: textColor ? textColor : 'white'
 			};
 		}
 
@@ -86,17 +110,19 @@
 		const saturation = 65 + (hash % 15); // 65-80%
 		const lightness = 45 + (hash % 10); // 45-55%
 
-		const background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+		const background = backgroundColor
+			? backgroundColor
+			: `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 		const rgb = hslToRgb(hue, saturation, lightness);
 		const backgroundLuminance = getLuminance(rgb);
 
 		const whiteContrast = (1 + 0.05) / (backgroundLuminance + 0.05);
 
 		const blackContrast = (backgroundLuminance + 0.05) / 0.05;
-
+		const text = textColor ? textColor : whiteContrast >= blackContrast ? 'white' : 'black';
 		return {
 			background,
-			text: whiteContrast >= blackContrast ? 'white' : 'black'
+			text
 		};
 	});
 
@@ -105,10 +131,12 @@
 
 <div
 	class={cn(
-		'group/user relative flex items-center gap-2 rounded-xl px-2 py-1.5',
+		'relative flex items-center  rounded-xl ',
 		'transition-all duration-150',
-		'text-[#8a8f8c] hover:bg-white/6 hover:text-cream',
+		'text-[#8a8f8c]  ',
 		'active:scale-[0.98]',
+		hover ? "group/user hover:text-cream hover:bg-white/6" : "",
+		badge ? 'gap-2' : '',
 		customStyle
 	)}
 >
@@ -120,7 +148,8 @@
 			color: {colors.text};
 			width: {size}px;
 			height: {size}px;
-			font-size: {size * 0.4}px;"
+			font-size: {size * 0.4}px;
+			border-radius: {radius}%;"
 		title={name}
 	>
 		{initials}
@@ -135,7 +164,7 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		border-radius: 50%;
+
 		color: white;
 		font-weight: 600;
 		user-select: none;
